@@ -5,9 +5,7 @@ use App\Core\QueryBuilder\DB;
 use App\Models\User;
 
 Route::get('/home', function () {
-    $data = ['name'=>'minh'];
-    $modelUser = new User();
-    dd($modelUser->find(1));
+    require_once 'app/Views/child.php';
 });
 
 Route::get('/about', function () {

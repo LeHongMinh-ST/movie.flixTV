@@ -1,4 +1,6 @@
 <?php
+//app
+define('APPPATH','app/');
 
 //DB
 define('DB_HOSTNAME', 'localhost');
