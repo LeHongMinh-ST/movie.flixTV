@@ -10,7 +10,7 @@ class Connection
 {
     private $mode = PDO::FETCH_OBJ;
 
-    public $conn;
+    private $conn;
 
     public function __construct()
     {
@@ -24,5 +24,10 @@ class Connection
         $result->setFetchMode($this->mode);
         $result->execute();
         return $result;
+    }
+
+    public function query($query){
+        $result = $this->conn->prepare($query);
+        return $result->execute();
     }
 }

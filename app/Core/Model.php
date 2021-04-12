@@ -12,6 +12,5 @@ class Model extends QueryBuider
 
     protected $fillable;
 
-
-
+//    public static function
 }
