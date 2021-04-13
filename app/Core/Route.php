@@ -94,6 +94,7 @@ class Route
                 // kiểm tra route hiện tại có phải là url đang được gọi.
                 $reg = '/^' . $route['url'] . '$/';
 
+
                 if (preg_match($reg, $url, $params)) {
                     array_shift($params);
                     self::call_action_route($route['action'], $params);

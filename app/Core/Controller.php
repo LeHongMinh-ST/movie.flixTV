@@ -6,9 +6,11 @@ namespace App\Core;
 
 class Controller
 {
+    protected $request;
+
     public function __construct()
     {
-
+        $this->request = new Request();
     }
 
     public function views($views, $data = [])
