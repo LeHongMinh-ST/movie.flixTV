@@ -13,6 +13,11 @@ class Route
      */
     private static $routes = [];
 
+    public function name($name)
+    {
+
+    }
+
     /**
      *
      * Phương thức get

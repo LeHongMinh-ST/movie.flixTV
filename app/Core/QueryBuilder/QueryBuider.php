@@ -4,6 +4,7 @@
 namespace App\Core\QueryBuilder;
 
 use App\Core\Connection;
+use stdClass;
 
 class QueryBuider
 {
@@ -27,7 +28,10 @@ class QueryBuider
 
     private $offsets;
 
-    protected $fillable = [];
+    private $page;
+
+    private $total;
+
 
     public function __construct()
     {
@@ -41,7 +45,7 @@ class QueryBuider
 
     public function __construct1()
     {
-
+        $this->total = count($this->get());
     }
 
     public function __construct2($table)
@@ -499,9 +503,8 @@ class QueryBuider
         return reset($data);
     }
 
-    public function get()
+    public function queryData()
     {
-
         if (!isset($this->table) || empty($this->table)) return false;
 
         $query = $this->distinct ? "SELECT DISTINCT " : "SELECT ";
@@ -594,8 +597,13 @@ class QueryBuider
             $query .= " OFFSET " . $this->offsets;
         }
 
+        return $query;
+    }
+
+    public function get()
+    {
         $conn = new Connection();
-        $result = $conn->getData($query);
+        $result = $conn->getData($this->queryData());
         $data = [];
 
         while ($obj = $result->fetch()) {
@@ -605,5 +613,64 @@ class QueryBuider
         return $data;
     }
 
+    public function pagination($limit = 10, $page = 1)
+    {
+        $this->page = $page;
 
+        $this->limit($limit);
+        $this->offset((($this->page - 1) * $this->limits));
+        $conn = new Connection();
+        $result = $conn->getData($this->queryData());
+
+        while ($row = $result->fetch()) {
+            $results[] = $row;
+        }
+
+
+        $result = new stdClass();
+        $result->page = $this->page;
+        $result->limit = $this->limits;
+        $result->total = $this->total;
+        $result->data = $results;
+
+        return $result;
+    }
+
+    public function createLinks( $links = 5, $list_class = '' ) {
+        if ( $this->limits == '' ) {
+            return '';
+        }
+
+        $last       = ceil( $this->total / $this->limits );
+
+        $start      = ( ( $this->page - $links ) > 0 ) ? $this->page - $links : 1;
+        $end        = ( ( $this->page + $links ) < $last ) ? $this->page + $links : $last;
+
+        $html       = '<ul class="' . $list_class . '">';
+
+        $class      = ( $this->page == 1 ) ? "disabled" : "";
+        $html       .= '<li class="' . $class . '"><a href="?page=' . ( $this->page - 1 ) . '">&laquo;</a></li>';
+
+        if ( $start > 1 ) {
+            $html   .= '<li><a href="?&page=1">1</a></li>';
+            $html   .= '<li class="disabled"><span>...</span></li>';
+        }
+
+        for ( $i = $start ; $i <= $end; $i++ ) {
+            $class  = ( $this->page == $i ) ? "active" : "";
+            $html   .= '<li class="' . $class . '"><a href="?&page=' . $i . '">' . $i . '</a></li>';
+        }
+
+        if ( $end < $last ) {
+            $html   .= '<li class="disabled"><span>...</span></li>';
+            $html   .= '<li><a href="?&page=' . $last . '">' . $last . '</a></li>';
+        }
+
+        $class      = ( $this->page == $last ) ? "disabled" : "";
+        $html       .= '<li class="' . $class . '"><a href="?page=' . ( $this->page + 1 ) . '">&raquo;</a></li>';
+
+        $html       .= '</ul>';
+
+        return $html;
+    }
 }

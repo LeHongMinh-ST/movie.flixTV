@@ -1,7 +1,7 @@
 <?php
 if (! defined('TI_VIEWS_DIR') ) {
-    if (defined('APPPATH')) {
-        define('TI_VIEWS_DIR', APPPATH.'Views/');
+    if (defined('APP_PATH')) {
+        define('TI_VIEWS_DIR', APP_PATH.'Views/');
     } else {
         define('TI_VIEWS_DIR', 'app/Views');
     }

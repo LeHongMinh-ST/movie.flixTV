@@ -3,9 +3,15 @@
 use App\Core\Route;
 use App\Core\QueryBuilder\DB;
 use App\Models\User;
+use http\Env\Url;
 
 Route::get('/home', function () {
-    require_once 'app/Views/child.php';
+    $modelUser = new User();
+    dd($_GET);
+    $data = $modelUser->pagination();
+
+echo    $modelUser->createLinks();
+//    $modelUser->createLinks()
 });
 
 Route::get('/about', function () {
