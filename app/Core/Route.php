@@ -13,11 +13,6 @@ class Route
      */
     private static $routes = [];
 
-    public function name($name)
-    {
-
-    }
-
     /**
      *
      * Phương thức get
@@ -28,10 +23,10 @@ class Route
      * @return void
      *
      */
-    public static function get($url, $action)
+    public static function get($url, $action, $name = '')
     {
         // Xử lý phương thức GET
-        self::request($url, 'GET', $action);
+        self::request($url, 'GET', $action, $name);
 
         return self::$routes;
     }
@@ -46,10 +41,10 @@ class Route
      * @return void
      *
      */
-    public static function post($url, $action)
+    public static function post($url, $action, $name = '')
     {
         // Xử lý phương thức POST
-        self::request($url, 'POST', $action);
+        self::request($url, 'POST', $action, $name);
     }
 
 
@@ -64,7 +59,7 @@ class Route
      * @return void
      *
      */
-    private static function request($url, $method, $action)
+    private static function request($url, $method, $action, $name)
     {
         // kiểm tra xem URL có chứa param không. VD: post/{id}
         if (preg_match_all('/({([a-zA-Z]+)})/', $url, $params)) {
@@ -78,6 +73,7 @@ class Route
         // Tạo một route mới
         $route = [
             'url' => $url,
+            'name' => $name == '' ? $url : $name,
             'method' => $method,
             'action' => $action,
             'params' => $params[2]
@@ -99,7 +95,6 @@ class Route
                 $reg = '/^' . $route['url'] . '$/';
 
                 if (preg_match($reg, $url, $params)) {
-
                     array_shift($params);
                     self::call_action_route($route['action'], $params);
                     return;
@@ -133,12 +128,16 @@ class Route
         // Nếu $action là một phương thức của controller. VD: 'HomeController@index'.
         if (is_string($action)) {
             $action = explode('@', $action);
-            $controller_name = 'app\\Controllers\\' . $action[0];
+            $controller_name = 'App\\Controllers\\' . $action[0];
             $controller = new $controller_name();
             call_user_func_array([$controller, $action[1]], $params);
 
             return;
         }
+    }
+
+    public static function getRoute(){
+        return self::$routes;
     }
 }
 
