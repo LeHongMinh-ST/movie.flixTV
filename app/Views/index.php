@@ -1,1 +1,1 @@
-Xin chào đây là trang web của Lê Hồng Minh
+Đây là trang web của Lê Hồng Minh

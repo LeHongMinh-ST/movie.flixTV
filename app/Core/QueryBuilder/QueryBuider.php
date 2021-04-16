@@ -200,7 +200,7 @@ class QueryBuider
      */
     public function orWhere($condition, $operator = null, $value = null)
     {
-        return $this->where($condition, $operator = null, $value = null, 'or');
+        return $this->where($condition, $operator, $value, 'or');
     }
 
     /**
