@@ -29,13 +29,13 @@ if (!function_exists('route')) {
                 $url = $route['url'];
                 $url = str_replace('\/', '/', $url);
 
-                $arrayURL = explode('/',$url);
-                if (!is_array($param)){
+                $arrayURL = explode('/', $url);
+                if (!is_array($param)) {
                     $param = explode("", $param);
                 }
 
-                foreach ($arrayURL as $key => $value){
-                    if ($value == '(.+)'){
+                foreach ($arrayURL as $key => $value) {
+                    if ($value == '(.+)') {
                         $arrayURL[$key] = $param[0];
 
                         unset($param[0]);
@@ -43,10 +43,16 @@ if (!function_exists('route')) {
                     }
                 }
 
-                $url = implode('/',$arrayURL);
-                return APP_URL.$url;
+                $url = implode('/', $arrayURL);
+                return APP_URL . $url;
             }
         }
         return null;
     }
+}
+
+function json($data)
+{
+    $json =  json_encode($data,true);
+    die($json);
 }
