@@ -11,6 +11,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        return $this->views('index');
+        return $this->views('client/pages/home');
     }
 }

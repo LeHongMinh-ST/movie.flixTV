@@ -56,3 +56,8 @@ function json($data)
     $json =  json_encode($data,true);
     die($json);
 }
+
+function redirect($path)
+{
+    header("location: $path");
+}
