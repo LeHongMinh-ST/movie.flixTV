@@ -1,0 +1,9 @@
+<script src="<?= asset('/publics/client/js/jquery-3.5.1.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/bootstrap.bundle.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/owl.carousel.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/slider-radio.js')?>"></script>
+<script src="<?= asset('/publics/client/js/select2.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/smooth-scrollbar.js')?>"></script>
+<script src="<?= asset('/publics/client/js/jquery.magnific-popup.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/plyr.min.js')?>"></script>
+<script src="<?= asset('/publics/client/js/main.js')?>"></script>

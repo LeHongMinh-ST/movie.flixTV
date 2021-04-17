@@ -503,6 +503,12 @@ class QueryBuider
         return reset($data);
     }
 
+    public function exists()
+    {
+        $data = $this->get();
+        return (count($data) > 0) ? true : false;
+    }
+
     public function queryData()
     {
         if (!isset($this->table) || empty($this->table)) return false;
@@ -636,40 +642,41 @@ class QueryBuider
         return $result;
     }
 
-    public function createLinks( $links = 5, $list_class = '' ) {
-        if ( $this->limits == '' ) {
+    public function createLinks($links = 5, $list_class = '')
+    {
+        if ($this->limits == '') {
             return '';
         }
 
-        $last       = ceil( $this->total / $this->limits );
+        $last = ceil($this->total / $this->limits);
 
-        $start      = ( ( $this->page - $links ) > 0 ) ? $this->page - $links : 1;
-        $end        = ( ( $this->page + $links ) < $last ) ? $this->page + $links : $last;
+        $start = (($this->page - $links) > 0) ? $this->page - $links : 1;
+        $end = (($this->page + $links) < $last) ? $this->page + $links : $last;
 
-        $html       = '<ul class="' . $list_class . '">';
+        $html = '<ul class="' . $list_class . '">';
 
-        $class      = ( $this->page == 1 ) ? "disabled" : "";
-        $html       .= '<li class="' . $class . '"><a href="?page=' . ( $this->page - 1 ) . '">&laquo;</a></li>';
+        $class = ($this->page == 1) ? "disabled" : "";
+        $html .= '<li class="' . $class . '"><a href="?page=' . ($this->page - 1) . '">&laquo;</a></li>';
 
-        if ( $start > 1 ) {
-            $html   .= '<li><a href="?&page=1">1</a></li>';
-            $html   .= '<li class="disabled"><span>...</span></li>';
+        if ($start > 1) {
+            $html .= '<li><a href="?&page=1">1</a></li>';
+            $html .= '<li class="disabled"><span>...</span></li>';
         }
 
-        for ( $i = $start ; $i <= $end; $i++ ) {
-            $class  = ( $this->page == $i ) ? "active" : "";
-            $html   .= '<li class="' . $class . '"><a href="?&page=' . $i . '">' . $i . '</a></li>';
+        for ($i = $start; $i <= $end; $i++) {
+            $class = ($this->page == $i) ? "active" : "";
+            $html .= '<li class="' . $class . '"><a href="?&page=' . $i . '">' . $i . '</a></li>';
         }
 
-        if ( $end < $last ) {
-            $html   .= '<li class="disabled"><span>...</span></li>';
-            $html   .= '<li><a href="?&page=' . $last . '">' . $last . '</a></li>';
+        if ($end < $last) {
+            $html .= '<li class="disabled"><span>...</span></li>';
+            $html .= '<li><a href="?&page=' . $last . '">' . $last . '</a></li>';
         }
 
-        $class      = ( $this->page == $last ) ? "disabled" : "";
-        $html       .= '<li class="' . $class . '"><a href="?page=' . ( $this->page + 1 ) . '">&raquo;</a></li>';
+        $class = ($this->page == $last) ? "disabled" : "";
+        $html .= '<li class="' . $class . '"><a href="?page=' . ($this->page + 1) . '">&raquo;</a></li>';
 
-        $html       .= '</ul>';
+        $html .= '</ul>';
 
         return $html;
     }

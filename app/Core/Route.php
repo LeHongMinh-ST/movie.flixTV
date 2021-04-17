@@ -15,6 +15,22 @@ class Route
 
     /**
      *
+     * - Chuỗi middleware của ứng dụng
+     * - Mỗi route sẽ chưa middleware để kiểm tra quyền
+     *
+     */
+    private static $middleware = null;
+
+    /**
+     *
+     * - Chuỗi prefix của ứng dụng
+     * - Mỗi route sẽ gôm url, method, action và params
+     *
+     */
+    private static $prefix = '';
+
+    /**
+     *
      * Phương thức get
      *
      * @param string $url URL cần so khớp
@@ -50,6 +66,41 @@ class Route
 
     /**
      *
+     * Xử lý middleware
+     *
+     * @param string $middleware tên của middleware
+     * @param string|callable $action Hành động khi URL được gọi.
+     *
+     * @return void
+     *
+     */
+    public static function middleware($middleware, $callback)
+    {
+        static::$middleware = $middleware;
+        call_user_func($callback);
+        static::$middleware = null;
+    }
+
+    /**
+     *
+     * Xử lý middleware
+     *
+     * @param string $prefix tên của prefix
+     * @param string|callable $action Hành động khi URL được gọi.
+     *
+     * @return void
+     *
+     */
+    public static function prefix($prefix, $callback)
+    {
+        static::$prefix = $prefix . '\\';
+        call_user_func($callback);
+        static::$prefix = '';
+    }
+
+
+    /**
+     *
      * Xử lý phương thức
      *
      * @param string $url URL cần so khớp
@@ -75,8 +126,9 @@ class Route
             'url' => $url,
             'name' => $name == '' ? $url : $name,
             'method' => $method,
-            'action' => $action,
-            'params' => $params[2]
+            'action' => is_callable($action) ? $action : static::$prefix . $action,
+            'params' => $params[2],
+            'middleware' => static::$middleware
         ];
 
         // Thêm route vào router.
@@ -97,11 +149,15 @@ class Route
 
                 if (preg_match($reg, $url, $params)) {
                     array_shift($params);
+
+                    Middleware::check($route['middleware']);
+
                     self::call_action_route($route['action'], $params);
                     return;
                 }
             }
         }
+
 
         // nếu không khớp với bất kì route nào cả.
         echo '404 - Not Found';
@@ -137,7 +193,8 @@ class Route
         }
     }
 
-    public static function getRoute(){
+    public static function getRoute()
+    {
         return self::$routes;
     }
 }
